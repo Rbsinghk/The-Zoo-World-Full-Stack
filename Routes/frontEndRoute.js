@@ -8,11 +8,7 @@ router.get('/login', (req, res) => {
     res.render('register/login')
 })
 router.get('/userData', async (req, res) => {
-    try {
-        res.render('userGet')
-    } catch (error) {
-        res.send('error')
-    }
+    res.render('UserGet')
 })
 router.get('/profile', async (req, res) => {
     res.render('userById')
