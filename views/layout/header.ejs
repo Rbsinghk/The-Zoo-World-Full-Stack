@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0-beta1/css/bootstrap.min.css"
+    integrity="sha512-o/MhoRPVLExxZjCFVBsm17Pkztkzmh7Dp8k7/3JrtNCHh0AQ489kwpfA3dPSHzKDe8YCuEhxXq3Y71eb/o6amg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+    integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">ZOO WORLD</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll"
+        aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarScroll">
+        <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+              aria-expanded="false">
+              Admin
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="/userData">Get Users Data</a>
+              <a class="dropdown-item" href="/feedbackGet">Get All Feedback</a>
+              <a class="dropdown-item" href="/animalcreate">Create Animal</a>
+              <a class="dropdown-item" href="/bookingTicketGet">Get All Ticket</a>
+              <a class="dropdown-item" href="/feedbackUpload">Upload Feedback File</a>
+              <button id="logout" class="dropdown-item" onclick="logout()"> Logout</button>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/animalget">Animals</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/feedback">Feedback</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/bookingTicket">Book Ticket</a>
+          </li>
+        </ul>
+        <!-- <li class="nav-item dropdown" style="color: white; margin: -15px;">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+          aria-expanded="false">
+          Dropdown
+        </a> -->
+        <!-- <div class="dropdown-menu" aria-labelledby="navbarDropdown"> -->
+        <!-- <a class="dropdown-item" href="/register">Register</a> -->
+        <!-- <a class="dropdown-item" href="/login">Login</a> -->
+        <!-- </li> -->
+        <!-- </div> -->
+        <button id="logout" class="nav-link active" aria-current="page" onclick="logout()"> Logout</button>
+      </div>
+  </nav>
+  <script>
+    function logout(logout) {
+      localStorage.clear()
+      window.location = "/login"
+    }
+  </script>
+</body>
+
+</html>

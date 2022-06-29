@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<body>
+    <%- include('layout/header')%>
+
+        <head>
+            <meta charset="UTF-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+            <link rel="stylesheet"
+                href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0-beta1/css/bootstrap.min.css"
+                integrity="sha512-o/MhoRPVLExxZjCFVBsm17Pkztkzmh7Dp8k7/3JrtNCHh0AQ489kwpfA3dPSHzKDe8YCuEhxXq3Y71eb/o6amg=="
+                crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+                integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+                crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <style>
+                #add-form {
+                    margin: 20%;
+                }
+            </style>
+            <title>Document</title>
+        </head>
+        <header>
+            <div class="body" id="bo">
+                <div class="container">
+                    <div class="row my-4">
+                        <div class="col-lg-12">
+
+                            <div class="table-responsive">
+                                <table class="table table-striped text-center">
+                                    <thead>
+                                        <tr class="table-dark">
+                                            <!-- <th>ID</th> -->
+                                            <th>Name</th>
+                                            <th>E-Mail</th>
+                                            <th>Mobile Number</th>
+                                            <th>Date Of Joining</th>
+                                            <th>Action</th>
+                                            <th>Details</th>
+                                        </tr>
+                                    </thead>
+                                    <div class="container1">
+                                        <div class="row1">
+                                        </div>
+                                    </div>
+                                    <tbody class="append2"></tbody>
+                                    <tbody class="append">
+                                    </tbody>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <script>
+            var token = localStorage.getItem('auth-token');
+            var headers = {}
+            headers['auth-token'] = token
+            $.ajax({
+                type: 'GET',
+                url: '/admin/alluser',
+                headers: headers,
+                success: (data) => {
+                    console.log(data)
+                    var html = "";
+                    for (i = 0; i < data.length; i++) {
+                        html += ' <tr><td> ' + data[i].name + ' </td><td> ' + data[i].email + ' </td><td> ' + data[i].number + ' </td><td> ' + data[i].date + ` </td> <td> <button id="${data[i]._id}" onclick="event.preventDefault(); updateData(this.id)" class="text-success"><i class="fas fa-edit fa-lg mx-1"></i></button><button id="${data[i]._id}" onclick="event.preventDefault(); deleteData(this.id)" class="text-danger"><i class="fas fa-trash fa-lg mx-1"></i></button></td><td><button id="${data[i]._id}" onclick="event.preventDefault(); getdata(this.id)"> Deatils</button></td> </tr>`
+                    }
+                    $(".append").append(html)
+                },
+                error: (error) => {
+                    alert('Invalid Role Only Admin can Access This')
+                    window.location = "/login"
+                }
+            });
+            function getdata(id) {
+                console.log(id)
+                $.ajax({
+                    type: 'GET',
+                    url: `/profile/${id}`,
+                    success: (id) => {
+                        console.log(id)
+                        var html = "";
+                        html += '<tr><td> ' + id.name + ' </td><td> ' + id.email + ' </td><td> ' + id.number + ' </td> <td> ' + id.date + ' </td></tr>'
+                        $(".append2").append(html)
+                    },
+                    error: (error) => {
+                        console.log(error)
+                    }
+                })
+            }
+            function deleteData(id) {
+                $.ajax({
+                    type: 'DELETE',
+                    url: `/profile/delete/${id}`,
+                    headers: headers,
+                    success: (data) => {
+                        console.log(data)
+                        window.location = "/userData"
+                    }
+                })
+            }
+            function updateData(id) {
+                console.log(id)
+                $.ajax({
+                    type: 'GET',
+                    url: `/profile/${id}`,
+                    success: (id) => {
+                        console.log(id)
+                        var html = "";
+                        html += `<h3 class="text-light">Update User (${id.name})</h3>
+      <div class="col-lg-6 mx-auto mt-4">
+      <form id="add-form"  >
+          <div class="mb-3">
+              <label for="exampleInputName1" class="form-label">Name</label>
+              <input type="name" name="name" class="form-control" id="name" aria-describedby="nameHelp" value="${id.name}">
+              <div id="nameHelp" class="form-text"></div>
+            </div>
+            <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">Email address</label>
+          <input type="email" name="email" class="form-control" id="email" aria-describedby="emailHelp" value="${id.email}">
+          <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+        </div>
+        <button id="${id._id}" onclick="event.preventDefault(); updateData1(this.id)" class="btn btn-success">Submit</button>
+      </form>`
+                        $(".row1").append(html)
+                    },
+                    error: (error) => {
+                        console.log(error)
+                    }
+                })
+            }
+            function updateData1(id) {
+                const email = document.getElementById("email").value;
+                const name = document.getElementById("name").value;
+                const data = { email, name }
+                $.ajax({
+                    type: 'PATCH',
+                    url: `/profile/update/${id}`,
+                    data: data,
+                    dataType: "json",
+                    success: (data) => {
+                        console.log(data)
+                        window.location = "/userData"
+                    },
+                    error: (error) => {
+                        console.log(error)
+                    }
+                })
+            }
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+            integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.min.js"
+            integrity="sha384-VHvPCCyXqtD5DqJeNxl2dtTyhF78xXNXdkwX1CZeRusQfRKp+tA7hAShOK/B/fQ2"
+            crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</body>
+
+</html>

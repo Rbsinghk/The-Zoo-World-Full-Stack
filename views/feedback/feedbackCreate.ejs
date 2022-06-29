@@ -1,0 +1,150 @@
+<%- include('../layout/header')%>
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+            integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+        <style>
+            body,
+            html {
+                height: 100%;
+            }
+
+            form {
+                padding: 20px;
+            }
+
+            .d {
+                background-image: url('pexels-photo-134058.jpeg');
+                height: auto;
+                max-width: 100%;
+                filter: blur(8px);
+                -webkit-filter: blur(8px);
+                height: 100%;
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
+
+            .con {
+                background-color: rgb(0, 0, 0);
+                background-color: rgba(0, 0, 0, 0.4);
+                color: white;
+                font-weight: bold;
+                border: 3px solid #f1f1f1;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                z-index: 2;
+                width: 80%;
+                padding: 20px;
+                text-align: center;
+            }
+        </style>
+        <title>register</title>
+    </head>
+
+    <body class="body">
+        <div class="d"></div>
+        <form class="con">
+            <div class="form-group row">
+                <label for="inputEmail3" class="col-sm-2 col-form-label">Name</label>
+                <div class="col-sm-5">
+                    <input type="name" class="form-control" id="name" name="name">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="inputEmail3" class="col-sm-2 col-form-label">Email</label>
+                <div class="col-sm-5">
+                    <input type="email" class="form-control" id="email" name="email">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="inputPassword3" class="col-sm-2 col-form-label">Subject</label>
+                <div class="col-sm-5">
+                    <input type="subject" class="form-control" id="subject" name="subject">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="inputEmail3" class="col-sm-2 col-form-label">Message</label>
+                <div class="col-sm-5">
+                    <input type="message" class="form-control" id="message" name="message">
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-5 offset-sm-2">
+                </div>
+            </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-5">
+                    <button type="submit" onclick=" event.preventDefault(); feedback()" class="btn btn-primary">Sign
+                        in</button>
+                </div>
+            </div>
+        </form>
+
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+            integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.min.js"
+            integrity="sha384-VHvPCCyXqtD5DqJeNxl2dtTyhF78xXNXdkwX1CZeRusQfRKp+tA7hAShOK/B/fQ2"
+            crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+        <script>
+            function feedback() {
+                const name = document.getElementById("name").value;
+                const email = document.getElementById("email").value;
+                const subject = document.getElementById("subject").value;
+                const message = document.getElementById("message").value;
+                const data = { name, email, message, subject }
+                var token = localStorage.getItem('auth-token');
+                var headers = {}
+                headers['auth-token'] = token
+                $.ajax({
+                    type: "POST",
+                    url: "/feedback/create",
+                    headers: headers,
+                    data: data,
+                    dataType: "json",
+                    success: (res) => {
+                        if (res === "Success") {
+                            alert('Feedback Send Successfully')
+                            window.location = "home"
+                        }
+                        else if (res === "Name not be empty") {
+                            alert("Name not be empty")
+                        }
+                        else if (res === "Email no is not empty") {
+                            alert("Email no is not empty")
+                        }
+                        else if (res === "Subject not be empty") {
+                            alert("Subject not be empty")
+                        }
+                        else if (res === "Message is not empty") {
+                            alert("Message is not empty")
+                        }
+                        else if (res === "This email is not in a correct format") {
+                            alert("This email is not in a correct format")
+                        }
+                    },
+                    error: (error) => {
+                        alert("First You have to Login")
+                        window.location = "/login"
+                    }
+                });
+            }
+        </script>
+    </body>
+
+
+    </html>

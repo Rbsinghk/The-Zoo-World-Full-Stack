@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<body>
+    <%- include('../layout/header')%>
+
+        <head>
+            <meta charset="UTF-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+            <link rel="stylesheet"
+                href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0-beta1/css/bootstrap.min.css"
+                integrity="sha512-o/MhoRPVLExxZjCFVBsm17Pkztkzmh7Dp8k7/3JrtNCHh0AQ489kwpfA3dPSHzKDe8YCuEhxXq3Y71eb/o6amg=="
+                crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+                integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+                crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <style>
+                body {
+                    background-image: url('amazing-beautiful-breathtaking-clouds.webp');
+                    height: auto;
+                    max-width: 100%;
+                    background-position: center;
+                    background-repeat: no-repeat;
+                    background-size: cover;
+                }
+
+                .container {
+                    background-color: rgba(255, 255, 255, 0.7);
+                    color: white;
+                    font-weight: bold;
+                    border: 3px solid #f1f1f1;
+                    z-index: 2;
+                    text-align: center;
+                }
+            </style>
+            <title>Document</title>
+        </head>
+        <div class="bg-image">
+            <header>
+                <div class="body" id="bo">
+                    <div class="container">
+                        <div class="row my-4">
+                            <div class="col-lg-12">
+
+                                <div class="table-responsive">
+                                    <table class="table table-striped text-center">
+                                        <thead>
+                                            <tr class="table-dark">
+                                                <th>Image</th>
+                                                <th>Name</th>
+                                                <th>Species</th>
+                                                <th>Age</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="append">
+
+                                        </tbody>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+        </div>
+        <script>
+            var token = localStorage.getItem('auth-token');
+            var headers = {}
+            headers['auth-token'] = token
+            $.ajax({
+                type: 'GET',
+                url: '/animal/getAll',
+                headers: headers,
+                success: (data) => {
+                    console.log(data)
+                    var html = "";
+                    for (i = 0; i < data.length; i++) {
+                        html += ' <tr><td> <img src=' + data[i].imageName + ' alt="get.image" width="50"> </td><td> ' + data[i].name + ' </td><td> ' + data[i].species + ' </td><td> ' + data[i].age + ` <td> <button id="${data[i]._id}" onclick="event.preventDefault(); getdata(this.id)" class="text-danger"><i class="fas fa-trash fa-lg mx-1"></i></a></td></tr>`
+                    }
+                    $(".append").append(html)
+                },
+                error: (error) => {
+                    alert('First You have to Login')
+                    window.location = "/login"
+                }
+            });
+            function getdata(id) {
+                $.ajax({
+                    type: 'DELETE',
+                    url: `/animal/delete/${id}`,
+                    headers: headers,
+                    success: (data) => {
+                        console.log(data)
+                        window.location = "/animalget"
+                    }
+                })
+            }
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+            integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.min.js"
+            integrity="sha384-VHvPCCyXqtD5DqJeNxl2dtTyhF78xXNXdkwX1CZeRusQfRKp+tA7hAShOK/B/fQ2"
+            crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</body>
+
+</html>

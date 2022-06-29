@@ -1,0 +1,565 @@
+swagger: "2.0"
+info:
+  title: The Zoo World
+  description: This is my Zoo Project
+  version: 1.0
+  contact:
+    email: rajbirkhokhar.vision@gmail.com
+  servers:
+    -url: "http://localhost:1000/"
+    description: This is my local server
+
+schemes: [http,https]
+
+securityDefinitions:  
+  JWT:  
+    type: apiKey  
+    in: header  
+    name: auth-token 
+
+tags: [{
+  name: Reg & Login,
+  description: Register & Login API},
+  {name: User APIs,
+  description: User All APIs},
+  {name: Animals All APIs,
+  description: Animals All APIs},
+  {name: Feedback,
+  description: Feedback All APIs},
+  {name: Ticket Booking,
+  description: Ticket Booking All APIs}
+  ]
+
+paths:
+ 
+#Register
+  /register:
+    post:
+      tags: [Reg & Login]
+      summary: Register User & Admin
+      parameters:
+      - in: formData
+        name: userProfileImage
+        type: file
+      - in: formData
+        name: name
+        type: string
+      - in: formData
+        name: email
+        type: string
+      - in: formData
+        name: password
+        type: string
+      - in: formData
+        name: isAdmin
+        type: string
+      - in: formData
+        name: number
+        type: string
+      responses:
+        200:
+          description: Success
+
+#Login
+  /login:
+    post:
+      tags: [Reg & Login]
+      summary: Login User & Admin
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+      - in: body
+        name: user
+        schema:
+          type: object
+          properties:
+            number:
+              type: number
+            email:
+              type: string
+            password:
+              type: string
+      responses:
+        200:
+          description: Success
+
+# Get All User Admin Only
+  /admin/alluser:
+    get:
+      tags: [User APIs]
+      security:  
+      - JWT: []
+      summary: Get All user(Admin Only)
+      description: Array Return
+      responses:
+        200:
+          description: Success
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+
+#Get User Data By Id
+  /profile/{userId}:
+    get:
+      tags: [User APIs]
+      summary: Get User By Id
+      description: Array Return
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success
+
+# Update User
+  /profile/update/{userId}:
+    patch:
+      tags: [User APIs]
+      summary: Update User
+      description: Array Return
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: reqBody
+          in: body
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+      responses:
+        200:
+          description: Success
+  
+# Delete User by id
+  /profile/delete/{userId}:
+    delete:
+      tags: [User APIs]
+      summary: Delete User by Id 
+      description: Array Return
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success
+
+#Send Email For Password Change
+  /profile/emailCode:
+    post:
+      tags: [User APIs]
+      security:  
+      - JWT: []
+      summary: Generate Otp through Email
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+      - in: body
+        name: user
+        schema:
+          type: object
+          properties:
+            email:
+              type: string
+      responses:
+        200:
+          description: Success
+
+#Change Password With Otp
+  /profile/changePass:
+    post:
+      tags: [User APIs]
+      security:  
+      - JWT: []
+      summary: Change Password with Otp
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+      - in: body
+        name: user
+        schema:
+          type: object
+          properties:
+            code:
+              type: string
+            email:
+              type: string
+            password:
+              type: string
+      responses:
+        200:
+          description: Success
+
+# Create Animal Admin Only
+  /animal/create:
+    post:
+      tags: [Animals All APIs]
+      security:  
+      - JWT: []
+      summary: Register Animals (Admin Only)
+      parameters:
+      - in: formData
+        name: Animal Image
+        type: file
+      - in: formData
+        name: name
+        type: string
+      - in: formData
+        name: species
+        type: string
+      - in: formData
+        name: age
+        type: string
+      responses:
+        200:
+          description: Success
+
+# Get All Animals
+  /animal/getAll:
+    get:
+      tags: [Animals All APIs]
+      security:  
+      - JWT: []
+      summary: Get All Animal
+      description: Array Return
+      responses:
+        200:
+          description: Success
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+
+# Get Animal By Id
+  /animal/get/{userId}:
+    get:
+      tags: [Animals All APIs]
+      summary: Get Animal by Id
+      description: Array Return
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success
+        400:
+          description: Error
+
+# Update Animal
+  /animal/update/{userId}:
+    patch:
+      tags: [Animals All APIs]
+      security:  
+      - JWT: []
+      summary: Update Animal (Admin Only)
+      description: Array Return
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: reqBody
+          in: body
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+      responses:
+        200:
+          description: Success
+
+# Delete Animal Admin Only
+  /animal/delete/{userId}:
+    delete:
+      tags: [Animals All APIs]
+      security:  
+      - JWT: []
+      summary: Delete Animal By Id (Admin Only)
+      description: Array Return
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success
+
+# Create Feedback
+  /feedback/create:
+    post:
+      tags: [Feedback]
+      security:  
+      - JWT: []
+      summary: Create Feedback
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+      - in: body
+        name: user
+        schema:
+          type: object
+          properties:
+            name:
+              type: string
+            email:
+              type: string
+            subject:
+              type: string
+            message:
+              type: string
+      responses:
+        200:
+          description: Success
+          
+#Get Feedback Admin Only
+  /feedback/get:
+    get:
+      tags: [Feedback]
+      security:  
+      - JWT: []
+      summary: Get All Feedback (Admin Only)
+      description: Array Return
+      responses:
+        200:
+          description: Success
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+
+# Delete Feedback Admin Only
+  /feedback/delete/{userId}:
+    delete:
+      tags: [Feedback]
+      security:  
+      - JWT: []
+      summary: Delete Feedback by Id (Admin Only)
+      description: Array Return
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success    
+
+# Delete All Feedback Admin Only
+  /feedback/delete:
+    delete:
+      tags: [Feedback]
+      security:  
+      - JWT: []
+      summary: Delete All Feedback(Admin Only)
+      description: Array Return
+      responses:
+        200:
+          description: Success
+
+# Create Ticket for Zoo
+  /booking/bookinTicket:
+    post:
+      tags: [Ticket Booking]
+      security:  
+      - JWT: []
+      summary: Create Ticket for ZOO
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+      - in: body
+        name: user
+        schema:
+          type: object
+          properties:
+            name:
+              type: string
+            email:
+              type: string
+            mobile:
+              type: string
+            person:
+              properties:
+                kids:
+                  type: string
+                  required: true
+                adult:
+                  type: string
+                  required: true
+                srCitizen:
+                  type: string
+                  required: true
+            dateOfVisit:
+              type: string
+      responses:
+        200:
+          description: Success
+
+# All Ticket Get Admin Only
+  /booking/bookinTicket/getAll:
+    get:
+      tags: [Ticket Booking]
+      security:  
+      - JWT: []
+      summary: Get All Ticket (Admin Only)
+      description: Array Return
+      responses:
+        200:
+          description: Success
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+
+# Update Ticket Booking
+  /booking/bookinTicket/{userId}:
+    patch:
+      tags: [Ticket Booking]
+      summary: Update Ticket By Id
+      description: Array Return
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: reqBody
+          in: body
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+              email:
+                type: string
+              mobile:
+                type: string
+              person:
+                properties:
+                  kids:
+                    type: string
+                    required: true
+                  adult:
+                    type: string
+                    required: true
+                  srCitizen:
+                    type: string
+                    required: true
+              dateOfVisit:
+                type: string
+      responses:
+        200:
+          description: Success
+
+# Delete Zoo Ticket Admin Only
+  /booking/bookinTicket/delete/{userId}:
+    delete:
+      tags: [Ticket Booking]
+      security:  
+      - JWT: []
+      summary: Delete Zoo Ticket (Admin Only)
+      description: Array Return
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success
+
+# Ticket Booking Payment
+  /booking/bookinTicket/pay:
+    post:
+      tags: [Ticket Booking]
+      security:  
+      - JWT: []
+      summary: Ticket Payment
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+      - in: body
+        name: user
+        schema:
+          type: object
+          properties:
+            name:
+              type: string
+            currency:
+              type: string
+            ticketId:
+              type: string
+      responses:
+        200:
+          description: Success
+
+# Get All Payment Data Admin Only
+  /booking/bookinTicket/pay/getAll:
+    get:
+      tags: [Ticket Booking]
+      security:  
+      - JWT: []
+      summary: Get All Payment Data (Admin Only)
+      description: Array Return
+      responses:
+        200:
+          description: Success
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
