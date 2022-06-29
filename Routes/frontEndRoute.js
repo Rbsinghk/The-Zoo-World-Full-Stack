@@ -9,7 +9,7 @@ router.get('/login', (req, res) => {
 })
 router.get('/userData', async (req, res) => {
     try {
-        let a = res.render('userGet')
+        res.render('userGet')
     } catch (error) {
         res.send('error')
     }
