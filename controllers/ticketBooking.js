@@ -62,8 +62,8 @@ const bookingTicketPay = async (req, res) => {
                 "payment_method": "paypal"
             },
             "redirect_urls": {
-                "return_url": "http://localhost:1000/success",
-                "cancel_url": "http://localhost:1000/cancel"
+                "return_url": "/success",
+                "cancel_url": "/cancel"
             },
             "transactions": [{
                 "item_list": {
@@ -118,7 +118,7 @@ const success = async (req, res) => {
                 paymentMethod: payment.payer.payment_method,
             })
             const save = await createPaymentData.save();
-            res.status(201).send('Success')
+            res.status(201).render('home')
         }
     });
 };
