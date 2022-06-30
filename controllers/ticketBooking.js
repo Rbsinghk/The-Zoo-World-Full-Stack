@@ -118,7 +118,7 @@ const success = async (req, res) => {
                 paymentMethod: payment.payer.payment_method,
             })
             const save = await createPaymentData.save();
-            res.status(201).render('home')
+            res.status(201).send('Success')
         }
     });
 };
