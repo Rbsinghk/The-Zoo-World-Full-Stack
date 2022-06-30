@@ -34,6 +34,17 @@
                     z-index: 2;
                     text-align: center;
                 }
+
+                .zoom {
+                    transition: transform .2s;
+                }
+
+                .zoom:hover {
+                    -ms-transform: scale(5.5);
+                    -webkit-transform: scale(5.5);
+                    transform: scale(2.5);
+                    border: 3px solid black;
+                }
             </style>
             <title>Document</title>
         </head>
@@ -78,7 +89,7 @@
                     console.log(data)
                     var html = "";
                     for (i = 0; i < data.length; i++) {
-                        html += ' <tr><td> <img src=' + data[i].imageName + ' alt="get.image" width="50"> </td><td> ' + data[i].name + ' </td><td> ' + data[i].species + ' </td><td> ' + data[i].age + ` <td> <button id="${data[i]._id}" onclick="event.preventDefault(); getdata(this.id)" class="text-danger"><i class="fas fa-trash fa-lg mx-1"></i></a></td></tr>`
+                        html += ' <tr><td> <img src=' + data[i].imageName + ' alt="get.image" width="50" class="zoom"> </td><td> ' + data[i].name + ' </td><td> ' + data[i].species + ' </td><td> ' + data[i].age + ` <td> <button id="${data[i]._id}" onclick="event.preventDefault(); getdata(this.id)" class="text-danger"><i class="fas fa-trash fa-lg mx-1"></i></a></td></tr>`
                     }
                     $(".append").append(html)
                 },
