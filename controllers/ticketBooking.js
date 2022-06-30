@@ -62,7 +62,7 @@ const bookingTicketPay = async (req, res) => {
                 "payment_method": "paypal"
             },
             "redirect_urls": {
-                "return_url": "https://rajbir-zoo-world.herokuapp.com/bookingTicket",
+                "return_url": "https://rajbir-zoo-world.herokuapp.com/success",
                 "cancel_url": "http://localhost:1000/cancel"
             },
             "transactions": [{
